@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalFoundationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        // step 2:
         val tabItems = listOf(
             TabItem(
                 "Home",
@@ -92,27 +92,34 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
+                    // step 5: Make a state of selected tab index
                     var selectedTabIndex by remember {
                         mutableIntStateOf(0)
                     }
+                    // step 7: Make a state of pager...
                     val pagerState = rememberPagerState(
                         initialPage = 0,
                         initialPageOffsetFraction = 0f
                     ) {
                         tabItems.size
                     }
+                    // step 8: Refresh the Horizontal pager when you selectedTabIndex state changes...
                     LaunchedEffect(selectedTabIndex) {
                         pagerState.scrollToPage(selectedTabIndex)
                     }
+                    // step 9: Refresh the selectedTab when the Horizontal pager.currentPage changes...
                     LaunchedEffect(pagerState.currentPage) {
                         selectedTabIndex = pagerState.currentPage
                     }
+
                     Column(modifier = Modifier.fillMaxSize()) {
+                        // 3rd step:
                         ScrollableTabRow(
                             selectedTabIndex = selectedTabIndex, edgePadding = 10.dp,
                             containerColor = Color.LightGray, contentColor = Color.Red,
 //                            divider = { Divider(thickness = 3.0.dp)}
-                        ) { // There is something called ScrollableTabRow()
+                        ) { // There is something called TabRow()
+                            // step 4:
                             tabItems.forEachIndexed { index, tabItem ->
                                 Tab(
                                     selected = selectedTabIndex == index,
@@ -132,6 +139,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                         }
+                        // step 6: make a Horizontal Pager to
                         HorizontalPager(
                             state = pagerState,
                             modifier = Modifier.fillMaxSize(),
@@ -149,7 +157,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
+// step 1:
 data class TabItem(
     val title: String,
     val selectedIcon: ImageVector,
